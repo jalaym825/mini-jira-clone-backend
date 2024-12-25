@@ -59,12 +59,10 @@ io.on('connection', (socket) => {
         if(sourceColumn === targetColumn)
             return;
                 
-        const task = globalTasks[sourceColumn].find(t => t.id === taskId);
-        
         globalTasks = {
             ...globalTasks,
             [sourceColumn]: globalTasks[sourceColumn].filter(t => t.id !== taskId),
-            [targetColumn]: [...globalTasks[targetColumn], task],
+            [targetColumn]: [...globalTasks[targetColumn], foundTask.task],
         };
 
         // Broadcast to all clients except sender
