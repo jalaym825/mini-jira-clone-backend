@@ -55,6 +55,7 @@ io.on('connection', (socket) => {
                 }
             }
         }
+        console.log("foundTask", foundTask)
         let sourceColumn = foundTask.status;
         if(sourceColumn === targetColumn)
             return;
@@ -65,6 +66,7 @@ io.on('connection', (socket) => {
             [targetColumn]: [...globalTasks[targetColumn], foundTask.task],
         };
 
+        console.log("globalTasks", globalTasks)
         // Broadcast to all clients except sender
         socket.broadcast.emit('task:move', {
             taskId, targetColumn
