@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
 
         // Broadcast to all clients except sender
         socket.broadcast.emit('task:move', {
-            taskId, sourceColumn, targetColumn
+            taskId, targetColumn
         });
     });
 
