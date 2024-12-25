@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const server = http.createServer(app);
+
 const io = new Server(server, {
     cors: {
         origin: "*",
@@ -56,6 +57,17 @@ io.on('connection', (socket) => {
         // Broadcast to all clients except sender
         socket.broadcast.emit('task:move', data);
     });
+
+    socket.on('task:edit', data => {
+        const {status, taskId, field, value:newValue} = data;
+        globalTasks[status] = globalTasks[status].map(task => {
+            if(task.id === taskId){
+                task[field] = newValue;
+            }
+            return task;
+        });
+        socket.broadcast.emit('task:edit', data);
+    })
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
