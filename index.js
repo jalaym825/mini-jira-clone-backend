@@ -36,7 +36,6 @@ let globalTasks = {
         { id: 4, title: 'Design review', description: 'Review homepage mockups', priority: 'Low' },
     ],
 };
-
 io.on('connection', (socket) => {
     console.log('a user connected');
 
@@ -45,7 +44,21 @@ io.on('connection', (socket) => {
 
     socket.on('task:move', (data) => {
         // Update global state
-        const { taskId, sourceColumn, targetColumn } = data;
+        let { taskId, targetColumn } = data;
+        let foundTask;
+        for(let status in globalTasks) {
+            for(let task of globalTasks[status]) {
+                if(task.id === taskId) {
+                    foundTask = {
+                        status, task
+                    };
+                }
+            }
+        }
+        let sourceColumn = foundTask.status;
+        if(sourceColumn === targetColumn)
+            return;
+                
         const task = globalTasks[sourceColumn].find(t => t.id === taskId);
         
         globalTasks = {
